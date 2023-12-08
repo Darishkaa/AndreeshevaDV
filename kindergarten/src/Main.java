@@ -1,18 +1,20 @@
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
-        HashSet<Child> children = new HashSet<>();
-        children.add(new Child( "a","b","c",10, false));
-        children.add(new Child( "f","e","d",10, true));
+        Container container = new Container();
+        Controller controller = new Controller(container);
 
-        Group group = new Group("newGroup",12);
-        group.add(new Child("a","b","c",10, false));
-        group.add(new Child( "f","e","d",10, true));
+        List<Child> children = new ArrayList<>();
+        children.add(new Child(0, "Валентина","Иванова","Геннадьевна",10, false));
+        children.add(new Child( 1,"Петр","Петров","Петрович",10, true));
+        Group group = new Group(0,"Солнышко",12, children);
 
-        Group groupLoaded = new Group("newGroupLoaded",14, children);
+        controller.add(group);
 
-        System.out.println(group);
-        System.out.println(groupLoaded);
+        OutputConsole console = new OutputConsole(controller);
+
+        console.getAll();
     }
 }
