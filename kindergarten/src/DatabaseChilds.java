@@ -6,7 +6,7 @@ public class DatabaseChilds {
 
     private ConnectionManager connectionManager;
     private final Statement statement;
-    private static String TABLE_NAME = "Groups";
+    private static String TABLE_NAME = "Children";
     public DatabaseChilds(ConnectionManager manager){
         connectionManager = manager;
         statement = connectionManager.getStatement();
@@ -25,7 +25,7 @@ public class DatabaseChilds {
     }
 
     public List<Child> getAll() {
-        try {
+        try (Statement statement = this.statement){
             ResultSet resultSet = statement.executeQuery("select * from" + TABLE_NAME);
             List<Child> children = new ArrayList<>();
             while (resultSet.next()) {

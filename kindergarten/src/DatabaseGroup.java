@@ -5,7 +5,7 @@ import java.util.List;
 public class DatabaseGroup {
     public ConnectionManager connection;;
     private final Statement statement;
-    private static String TABLE_NAME = "Children";
+    private static String TABLE_NAME = "Groups";
     public DatabaseGroup(ConnectionManager manager){
         connection = manager;
         statement = connection.getStatement();
@@ -23,7 +23,7 @@ public class DatabaseGroup {
     }
 
     public List<Group> getAll() {
-        try {
+        try (Statement statement = this.statement){
             ResultSet resultSet =
                     statement.executeQuery("select * from" + TABLE_NAME);
             List<Group> groups = new ArrayList<>();
