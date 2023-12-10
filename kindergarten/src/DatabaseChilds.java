@@ -3,28 +3,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DatabaseChilds {
-    public static final String USER = "root";
-    public static final String PASSWORD = "dasha200";
-    public static final String DB_URL = "jdbc:mysql://localhost:3306/mysql";
-    public static Statement statement;
-    public static Connection connection;
 
-    private static String TABLE_NAME = "Children";
-    public DatabaseChilds(){
-        try {
-            connection =
-                    DriverManager.getConnection(DB_URL, USER, PASSWORD);
-        } catch (SQLException e) {
-            throw new RuntimeException("Error while db connecting: " + e.getMessage());
-        }
-
-        try{
-            statement = connection.createStatement();
-        }
-        catch (SQLException e){
-            e.printStackTrace();
-            throw new RuntimeException();
-        }
+    private ConnectionManager connectionManager;
+    private final Statement statement;
+    private static String TABLE_NAME = "Groups";
+    public DatabaseChilds(ConnectionManager manager){
+        connectionManager = manager;
+        statement = connectionManager.getStatement();
     }
 
 
@@ -40,9 +25,8 @@ public class DatabaseChilds {
     }
 
     public List<Child> getAll() {
-        try (Statement statement = DatabaseChilds.statement) {
-            ResultSet resultSet =
-                    statement.executeQuery("select * from" + TABLE_NAME);
+        try {
+            ResultSet resultSet = statement.executeQuery("select * from" + TABLE_NAME);
             List<Child> children = new ArrayList<>();
             while (resultSet.next()) {
                 long uid = resultSet.getInt("id");

@@ -3,30 +3,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DatabaseGroup {
-    public static final String USER = "root";
-    public static final String PASSWORD = "dasha200";
-    public static final String DB_URL = "jdbc:mysql://localhost:3306/mysql";
-    public static Statement statement;
-    public static Connection connection;
-
-    private static String TABLE_NAME = "Groups";
-    public DatabaseGroup(){
-        try {
-            connection =
-                    DriverManager.getConnection(DB_URL, USER, PASSWORD);
-        } catch (SQLException e) {
-            throw new RuntimeException("Error while db connecting: " + e.getMessage());
-        }
-
-        try{
-            statement = connection.createStatement();
-        }
-        catch (SQLException e){
-            e.printStackTrace();
-            throw new RuntimeException();
-        }
+    public ConnectionManager connection;;
+    private final Statement statement;
+    private static String TABLE_NAME = "Children";
+    public DatabaseGroup(ConnectionManager manager){
+        connection = manager;
+        statement = connection.getStatement();
     }
-
 
     public Group get(Long id) {
         List<Group> groups = getAll();
@@ -40,7 +23,7 @@ public class DatabaseGroup {
     }
 
     public List<Group> getAll() {
-        try (Statement statement = DatabaseGroup.statement) {
+        try {
             ResultSet resultSet =
                     statement.executeQuery("select * from" + TABLE_NAME);
             List<Group> groups = new ArrayList<>();
